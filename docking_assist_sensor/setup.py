@@ -13,14 +13,15 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='zeta',
-    maintainer_email='zeta@todo.todo',
+    maintainer='lolddohaja',
+    maintainer_email='progryu@zetabank.co.kr',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'docking_guide = docking_assist_sensor.docking_guide:main'
+            'docking_sensor = docking_assist_sensor.docking_sensor:main'
         ],
     },
 )

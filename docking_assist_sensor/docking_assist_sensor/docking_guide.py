@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Bool
 
 class CenterDetectionNode(Node):
@@ -9,9 +9,7 @@ class CenterDetectionNode(Node):
         self.declare_parameter('left_right_threshold', 0.1)
         self.declare_parameter('front_threshold', 0.5)
 
-        self.sensor_subscription_left = self.create_subscription(Float32, 'left_distance', self.handle_left_distance, 10)
-        self.sensor_subscription_right = self.create_subscription(Float32, 'right_distance', self.handle_right_distance, 10)
-        self.sensor_subscription_front = self.create_subscription(Float32, 'front_distance', self.handle_front_distance, 10)
+        self.sensor_subscription = self.create_subscription(Float32MultiArray, 'sensor_data', self.handle_sensor_data, 10)
 
         self.center_status_publisher = self.create_publisher(Bool, 'center_status', 10)
 
@@ -19,16 +17,12 @@ class CenterDetectionNode(Node):
         self.right_distance = 0.0
         self.front_distance = 0.0
 
-    def handle_left_distance(self, msg):
-        self.left_distance = msg.data
-        self.evaluate_position()
 
-    def handle_right_distance(self, msg):
-        self.right_distance = msg.data
-        self.evaluate_position()
-
-    def handle_front_distance(self, msg):
-        self.front_distance = msg.data
+    def handle_sensor_data(self, msg):
+        # 센서 데이터 배열에서 각 거리 값을 할당
+        self.left_distance = msg.data[0]
+        self.right_distance = msg.data[1]
+        self.front_distance = msg.data[2]
         self.evaluate_position()
 
     def evaluate_position(self):
